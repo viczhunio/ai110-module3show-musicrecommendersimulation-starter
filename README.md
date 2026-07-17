@@ -172,11 +172,29 @@ Profile: lofi / focused  |  target energy 0.40
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
+### Feature removal: disabling the mood check
 
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+To test how sensitive the rankings are to a single feature, I temporarily
+commented out the mood bonus in `score_song` and re-ran all three profiles.
+
+**What happened:** every song that had matched the user's mood lost exactly its
+`+1.0`, while mood-mismatched songs were unchanged — confirming the math behaved
+as expected. The **#1 pick never changed** for any profile (genre `+2.0` and
+energy `×1.5` still dominate), but the mid-list ordering shifted:
+
+| Profile | With mood | Mood removed |
+|---|---|---|
+| Deep-focus lofi | Focus Flow leads by 1.04 | Focus Flow leads by only 0.04 |
+| Upbeat pop | Rooftop Lights #4, Concrete Kingdom #5 | swapped |
+| Intense rock | Gym Hero #2, Ashfall #4 | Ashfall jumps to #2 |
+
+**Conclusion — different, not more accurate.** Removing mood let
+mood-*mismatched* songs float up: an *aggressive* metal track (Ashfall) rose
+above genuinely *intense* rock tracks, and an *energetic* hip-hop song rose
+above a *happy* pop one. So mood wasn't dead weight — it does real work as a
+**tiebreaker across same-genre and cross-genre songs**. This showed the weight
+hierarchy is behaving as designed: genre is the anchor, energy the driver, and
+mood the fine-tuner.
 
 ---
 

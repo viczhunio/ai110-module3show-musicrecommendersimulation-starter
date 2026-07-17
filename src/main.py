@@ -44,6 +44,18 @@ PROFILES = [
         "instrumentalness": 0.05,
         "popularity": 75,
     }),
+    # A high-energy "rock / intense" listener.
+    ("INTENSE ROCK", {
+        "genre": "rock",
+        "mood": "intense",
+        "energy": 0.90,
+        "tempo_bpm": 150,
+        "valence": 0.45,
+        "danceability": 0.65,
+        "acousticness": 0.10,
+        "instrumentalness": 0.15,
+        "popularity": 60,
+    }),
 ]
 
 
