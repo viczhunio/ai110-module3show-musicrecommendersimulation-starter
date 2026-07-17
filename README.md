@@ -199,12 +199,9 @@ This recommender has several limitations. It runs on a tiny catalog of just 18 s
 
 Read and complete `model_card.md`:
 
-[**Model Card**](model_card.md)
+[**Model Card**](model_card.md)            
 
-Write 1 to 2 paragraphs here about what you learned:
-
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
+                      
 Building this made me realize that a recommender is really just a scoring rule turning data into a ranking. Music platforms have a wide variety of data with each song, and thats how they are able to find the right picks and curate different playlists to different genres, etc. The program compares that data to a listener's profile, awards points for how well they match, and sorts the results. There is no real "understanding" of music happening. 
 
 That's also where bias creeps in. Systems can quietly trap users in one style and hide good songs from similar genres. A model can only "see" the features it was given, and it treats whatever it was told to prioritize as most important — so the people who build it quietly shape what everyone else discovers. A system can reinforce what is already popular, and hide groups that are underrepresented in the data.
