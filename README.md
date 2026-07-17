@@ -27,7 +27,22 @@ Some prompts to answer:
 - How does your `Recommender` compute a score for each song
 - How do you choose which songs to recommend
 
-You can include a simple diagram or bullet list if helpful.
+You can include a simple diagram or bullet list if helpful.                
+
+Real world music reccomendation systems use and analyze patterns from millions of users on their apps to predict what a listener would enjoy next. My simulation implements Content-Based Filtering. Rather than relying on crowd-sourced data, it evaluates individual tracks that align with the user's personal taste profile. This version prioritizes a matching Genre, to ensure tracks outside the user's core taste are penalized. The recommendation is then fine tuned through emotional moods, calculating a proximity score. 
+         
+Some features each `Song` will use: 
+- id
+- title 
+- artist
+- genre
+- mood 
+- energy           
+          
+Some information that `UserProfile` will use is: 
+- favorite genre
+- favorite mood 
+- likes 
 
 ---
 
