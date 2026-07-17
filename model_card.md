@@ -20,7 +20,7 @@ The app gives every song a score for one listener. Then it returns the songs wit
 
 ## 4. Data  
 
-The catalog is a small mock dataset. It has 18 songs, and about 14 genres. These include pop, lofi, rock, jazz, hip-hop, soul/r&b, metal, and more. They also cover 11 moods, like happy, chill, intense, sad, and focused. Each song has a genre, a mood, and several number traits. Those traits are energy, tempo, valence, danceability, acousticness, instrumentalness, and popularity. I added two columns to the starter data: instrumentalness and popularity. This gave the model more detail to score on. The dataset is small so it leaves a lot of music out. Most genres have only one song. There is no classical, country, or much world music. The data also has no lyrics and no listening history.           
+The catalog is a small mock dataset. It has 18 songs, and 14 genres. These include pop, lofi, rock, jazz, hip-hop, soul/r&b, metal, and more. They also cover 11 moods, like happy, chill, intense, sad, and focused. Each song has a genre, a mood, and several number traits. Those traits are energy, tempo, valence, danceability, acousticness, instrumentalness, and popularity. I added two columns to the starter data: instrumentalness and popularity. This gave the model more detail to score on. The dataset is small so it leaves a lot of music out. Most genres have only one song. There is no classical, country, or much world music. The data also has no lyrics and no listening history.           
 
 ---
 
@@ -32,7 +32,7 @@ The system works best for listeners with a clear, consistent taste. When someone
 
 ## 6. Limitations and Bias 
 
-The biggest weakness I discovered during testing is a genre filter bubble created by the heavy `+2.0` genre weight. A genre match is worth more than a perfect energy match (1.5) and far more than any single other feature(~0.08). Because of that, same-genre songs almost always fill the top of the list. With the Lofi profile the top three results were all lofi, and the mood-removal experiment confirmed that genre and energy alone decide the #1 pick. This means a listener is rarely shown a great song from an adjacent genre, so the system reinforces existing taste instead of encouraging discovery. The problem is compounded by exact-string genre matching: `"indie pop"` does not match `"pop"`. Closely related subgenres are penalized as if they were completely different. With roughly 13 genres spread across only 18 songs, most genres have a single track, so once the genre filter narrows the field there is almost no variety left to rank.
+The biggest weakness I discovered during testing is a genre filter bubble created by the heavy `+2.0` genre weight. A genre match is worth more than a perfect energy match (1.5) and far more than any single other feature(~0.08). Because of that, same-genre songs almost always fill the top of the list. With the Lofi profile the top three results were all lofi, and the mood-removal experiment confirmed that genre and energy alone decide the #1 pick. This means a listener is rarely shown a great song from an adjacent genre, so the system reinforces existing taste instead of encouraging discovery. The problem is compounded by exact-string genre matching: `"indie pop"` does not match `"pop"`. Closely related subgenres are penalized as if they were completely different. With 14 genres spread across only 18 songs, most genres have a single track, so once the genre filter narrows the field there is almost no variety left to rank.
 
 ---
 

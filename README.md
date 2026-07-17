@@ -2,16 +2,7 @@
 
 ## Project Summary
 
-In this project you will build and explain a small music recommender system.
-
-Your goal is to:
-
-- Represent songs and a user "taste profile" as data
-- Design a scoring rule that turns that data into recommendations
-- Evaluate what your system gets right and wrong
-- Reflect on how this mirrors real world AI recommenders
-
-Replace this paragraph with your own summary of what your version does.
+My version of AmbiVibe is a command-line music recommender that scores every song in an 18-track catalog against a listener's taste profile. It returns the top 5 recomendations with an explanation for each. It uses a weighted system to match genre(+2.0), mood(+1.0), energy, and 6 other smaller audio features as tiebreakers. The runner demonstrates three different listeners: deep-focus lofi, upbeat pop, and intense rock. This mirrors real world AI recommenders who use content based filtering with user based filtering, recognzining patterns in the data and among users. 
 
 ---
 
@@ -80,7 +71,7 @@ You can add more tests in `tests/test_recommender.py`.
 ## Sample Recommendation Output
 
 Running `python -m src.main` produces the following for the deep-focus lofi
-profile (one of two profiles the runner demonstrates):
+profile (one of three profiles the runner demonstrates):
 
 ```
 Loaded songs: 18
@@ -200,15 +191,7 @@ mood the fine-tuner.
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
-
-Examples:
-
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
-
-You will go deeper on this in your model card.
+This recommender has several limitations. It runs on a tiny catalog of just 18 songs, so there is little variety to draw from. It leans heavily on genre, which can trap a listener in one style and hide good songs from other genres. It also ignores things real listeners care about, like lyrics, language, and listening history. Finally, it does not check for bad input, so an out-of-range value can produce a strange (even negative) score — I explore these issues further in the model card.
 
 ---
 
@@ -222,3 +205,6 @@ Write 1 to 2 paragraphs here about what you learned:
 
 - about how recommenders turn data into predictions
 - about where bias or unfairness could show up in systems like this
+Building this made me realize that a recommender is really just a scoring rule turning data into a ranking. Music platforms have a wide variety of data with each song, and thats how they are able to find the right picks and curate different playlists to different genres, etc. The program compares that data to a listener's profile, awards points for how well they match, and sorts the results. There is no real "understanding" of music happening. 
+
+That's also where bias creeps in. Systems can quietly trap users in one style and hide good songs from similar genres. A model can only "see" the features it was given, and it treats whatever it was told to prioritize as most important — so the people who build it quietly shape what everyone else discovers. A system can reinforce what is already popular, and hide groups that are underrepresented in the data.
