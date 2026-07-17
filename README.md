@@ -79,18 +79,94 @@ You can add more tests in `tests/test_recommender.py`.
 
 ## Sample Recommendation Output
 
-Paste a sample of your recommender's output here as a text block so a reader can see what it produces:
+Running `python -m src.main` produces the following for the deep-focus lofi
+profile (one of two profiles the runner demonstrates):
 
 ```
-# e.g.:
-# User profile: genre=indie, mood=chill, energy=low
-# Recommendations:
-#   1. ...
-#   2. ...
-#   3. ...
-```
+Loaded songs: 18
 
-**Screenshot or video** *(optional)*: <!-- Insert a screenshot or demo video link here -->
+TOP RECOMMENDATIONS 
+Profile: lofi / focused  |  target energy 0.40
+==============================================
+
+#1                                Score: 4.99
+    Song:   Focus Flow
+    Artist: LoRoom
+    Genre:  lofi
+    Mood:   focused
+
+    Why:
+      - genre match: lofi (+2.0)
+      - mood match: focused (+1.0)
+      - energy match (+1.50)
+      - tempo_bpm match (+0.08)
+      - valence match (+0.08)
+      - danceability match (+0.08)
+      - acousticness match (+0.08)
+      - instrumentalness match (+0.08)
+      - popularity match (+0.08)
+----------------------------------------------
+#2                                Score: 3.95
+    Song:   Midnight Coding
+    Artist: LoRoom
+    Genre:  lofi
+    Mood:   chill
+
+    Why:
+      - genre match: lofi (+2.0)
+      - energy match (+1.47)
+      - tempo_bpm match (+0.08)
+      - valence match (+0.08)
+      - danceability match (+0.08)
+      - acousticness match (+0.08)
+      - instrumentalness match (+0.08)
+      - popularity match (+0.07)
+----------------------------------------------
+#3                                Score: 3.90
+    Song:   Library Rain
+    Artist: Paper Lanterns
+    Genre:  lofi
+    Mood:   chill
+
+    Why:
+      - genre match: lofi (+2.0)
+      - energy match (+1.42)
+      - tempo_bpm match (+0.08)
+      - valence match (+0.08)
+      - danceability match (+0.08)
+      - acousticness match (+0.07)
+      - instrumentalness match (+0.08)
+      - popularity match (+0.08)
+----------------------------------------------
+#4                                Score: 1.88
+    Song:   Coffee Shop Stories
+    Artist: Slow Stereo
+    Genre:  jazz
+    Mood:   relaxed
+
+    Why:
+      - energy match (+1.46)
+      - tempo_bpm match (+0.07)
+      - valence match (+0.06)
+      - danceability match (+0.07)
+      - acousticness match (+0.07)
+      - instrumentalness match (+0.07)
+      - popularity match (+0.08)
+----------------------------------------------
+#5                                Score: 1.77
+    Song:   Grandma's Porch
+    Artist: The Willow Kind
+    Genre:  folk
+    Mood:   nostalgic
+
+    Why:
+      - energy match (+1.40)
+      - tempo_bpm match (+0.08)
+      - valence match (+0.08)
+      - acousticness match (+0.07)
+      - popularity match (+0.07)
+----------------------------------------------
+```
 
 ---
 

@@ -257,10 +257,12 @@ class Recommender:
     maps results back to Song objects.
     """
     def __init__(self, songs: List[Song]):
+        """Store the song catalog this recommender will rank."""
         self.songs = songs
 
     @staticmethod
     def _song_dict(song: Song) -> Dict:
+        """Convert a Song object into the plain dict the scoring pipeline expects."""
         return {
             "id": song.id,
             "title": song.title,
@@ -278,6 +280,7 @@ class Recommender:
 
     @staticmethod
     def _user_prefs(user: UserProfile) -> Dict:
+        """Convert a UserProfile into the prefs dict the scoring pipeline expects."""
         prefs: Dict = {
             "genre": user.favorite_genre,
             "mood": user.favorite_mood,
@@ -304,6 +307,7 @@ class Recommender:
         return prefs
 
     def recommend(self, user: UserProfile, k: int = 5) -> List[Song]:
+        """Return the top-k Song objects ranked for the given user profile."""
         song_dicts = [self._song_dict(s) for s in self.songs]
         prefs = self._user_prefs(user)
         ranked = recommend_songs(prefs, song_dicts, k)
@@ -312,6 +316,7 @@ class Recommender:
         return [id_to_song[item[0]["id"]] for item in ranked]
 
     def explain_recommendation(self, user: UserProfile, song: Song) -> str:
+        """Return a one-line string with the song's score and matching reasons."""
         song_dicts = [self._song_dict(s) for s in self.songs]
         ranges = compute_feature_ranges(song_dicts)
 
