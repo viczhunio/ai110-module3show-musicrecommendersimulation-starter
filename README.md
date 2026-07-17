@@ -17,32 +17,28 @@ Replace this paragraph with your own summary of what your version does.
 
 ## How The System Works
 
-Explain your design in plain language.
+Real world music recommendation systems analyze patterns from millions of users to predict what a listener would enjoy next. My simulation instead implements **Content-Based Filtering**: rather than relying on crowd-sourced data, it scores each individual track against the user's personal taste profile. It prioritizes a matching genre so tracks outside the user's core taste are penalized, then fine-tunes with mood and how closely a song's energy matches the target.
 
-Some prompts to answer:
+**What each `Song` stores:** `id`, `title`, `artist`, `genre`, `mood`, and seven numeric features — `energy`, `tempo_bpm`, `valence`, `danceability`, `acousticness`, `instrumentalness`, and `popularity`.
 
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
-- What information does your `UserProfile` store
-- How does your `Recommender` compute a score for each song
-- How do you choose which songs to recommend
+**What the `UserProfile` stores:** a `favorite_genre`, a `favorite_mood`, a `target_energy` (0–1), and `likes_acoustic` (true/false). It can also hold optional targets for the other numeric features.
 
-You can include a simple diagram or bullet list if helpful.                
+### Algorithm Recipe
 
-Real world music reccomendation systems use and analyze patterns from millions of users on their apps to predict what a listener would enjoy next. My simulation implements Content-Based Filtering. Rather than relying on crowd-sourced data, it evaluates individual tracks that align with the user's personal taste profile. This version prioritizes a matching Genre, to ensure tracks outside the user's core taste are penalized. The recommendation is then fine tuned through emotional moods, calculating a proximity score. 
-         
-Some features each `Song` will use: 
-- id
-- title 
-- artist
-- genre
-- mood 
-- energy           
-          
-Some information that `UserProfile` will use is: 
-- favorite genre
-- favorite mood 
-- likes 
+Each song earns a score out of a possible **5.0**, then the top 5 are returned:
+
+| Component | Rule | Points |
+|---|---|---|
+| **Genre match** | song genre == favorite genre | +2.0 |
+| **Mood match** | song mood == favorite mood | +1.0 |
+| **Energy similarity** | `1 − |target_energy − song_energy|`, weighted ×1.5 | 0 → 1.5 |
+| **Other features** | average closeness of tempo, valence, danceability, acousticness, instrumentalness, popularity, weighted ×0.5 | 0 → 0.5 |
+
+`score = 2.0×genre + 1.0×mood + 1.5×energy_similarity + 0.5×(avg of other features)`
+
+Genre is the strongest signal, mood is worth half as much, and energy is pulled out as its own weighted term so it clearly shapes the ranking while the remaining features act as fine tuning. Songs are ranked highest-to-lowest and the top 5 are shown with a plain-language reason for each.
+
+**Potential biases:** Because genre carries the most weight (2.0), this system might over-prioritize genre — a great song that matches the user's mood and energy but sits in a different genre can be buried beneath weaker same-genre tracks.
 
 ---
 
@@ -132,6 +128,3 @@ Write 1 to 2 paragraphs here about what you learned:
 
 - about how recommenders turn data into predictions
 - about where bias or unfairness could show up in systems like this
-
-
-

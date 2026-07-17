@@ -13,7 +13,8 @@ from recommender import load_songs, recommend_songs
 
 
 def main() -> None:
-    songs = load_songs("data/songs.csv") 
+    songs = load_songs("data/songs.csv")
+    print(f"Loaded songs: {len(songs)}")
 
     # Taste profile: a "deep-focus / chill lofi" listener.
     # Numeric values are raw here; recommend_songs normalizes them to 0-1 using

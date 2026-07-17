@@ -27,9 +27,9 @@ MOOD_BONUS = 1.0
 ENERGY_WEIGHT = 1.5   # energy_similarity (raw 0-1) is multiplied by this
 OTHER_WEIGHT = 0.5    # avg similarity of the remaining numeric features
 
-# A song counts as a "close match" on a feature (worth mentioning in an
-# explanation) when its scaled distance from the target is small.
-CLOSE_MATCH_THRESHOLD = 0.85
+# A feature is "close" enough to be worth mentioning in the reasons list when
+# its similarity clears this bar. Lower = more (weaker) reasons shown per song.
+CLOSE_MATCH_THRESHOLD = 0.75
 
 
 @dataclass
@@ -168,40 +168,48 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     Returns (score, reasons).
     """
     reasons: List[str] = []
+    score = 0.0
+
+    # Categorical bonuses (the headline weights). Shown first so the biggest
+    # contributors lead the explanation.
+    if user_prefs.get("genre") and song.get("genre") == user_prefs.get("genre"):
+        score += GENRE_BONUS
+        reasons.append(f"genre match: {song.get('genre')} (+{GENRE_BONUS:.1f})")
+    if user_prefs.get("mood") and song.get("mood") == user_prefs.get("mood"):
+        score += MOOD_BONUS
+        reasons.append(f"mood match: {song.get('mood')} (+{MOOD_BONUS:.1f})")
 
     # Energy similarity: its own, heavier-weighted term. Energy is already on a
     # 0-1 scale, so it is compared raw (no normalization needed).
     energy_similarity = 0.0
     if "energy" in user_prefs and "energy" in song:
         energy_similarity = 1.0 - abs(user_prefs["energy"] - song["energy"])
-        if energy_similarity >= CLOSE_MATCH_THRESHOLD:
-            reasons.append("energy is close to your target")
+    energy_points = ENERGY_WEIGHT * energy_similarity
+    score += energy_points
+    if energy_similarity >= CLOSE_MATCH_THRESHOLD:
+        reasons.append(f"energy match (+{energy_points:.2f})")
 
-    # Other numeric features: average (1 - normalized distance) over every
-    # numeric feature EXCEPT energy that the profile specifies a target for.
-    other_sims: List[float] = []
+    # Other numeric features: compared on their normalized (_scaled) values and
+    # averaged together, then weighted. Because they share OTHER_WEIGHT via an
+    # average, each feature's marginal contribution is
+    # OTHER_WEIGHT * similarity / (number of other features scored).
+    other_pairs: List[Tuple[str, float]] = []
     for feature in NUMERIC_FEATURES:
         if feature == "energy":
             continue
         key = feature + "_scaled"
         if key in user_prefs and key in song:
-            distance = abs(user_prefs[key] - song[key])
-            similarity = 1.0 - distance
-            other_sims.append(similarity)
+            other_pairs.append((feature, 1.0 - abs(user_prefs[key] - song[key])))
+
+    if other_pairs:
+        other_avg = sum(sim for _, sim in other_pairs) / len(other_pairs)
+        score += OTHER_WEIGHT * other_avg
+        # Only mention features that clear the closeness bar, each with the
+        # points it actually added.
+        for feature, similarity in other_pairs:
             if similarity >= CLOSE_MATCH_THRESHOLD:
-                reasons.append(f"{feature} is close to your target")
-
-    other_avg = sum(other_sims) / len(other_sims) if other_sims else 0.0
-
-    score = ENERGY_WEIGHT * energy_similarity + OTHER_WEIGHT * other_avg
-
-    # Categorical bonuses layered on top of the numeric similarity.
-    if user_prefs.get("genre") and song.get("genre") == user_prefs.get("genre"):
-        score += GENRE_BONUS
-        reasons.append(f"matches your favorite genre ({song.get('genre')})")
-    if user_prefs.get("mood") and song.get("mood") == user_prefs.get("mood"):
-        score += MOOD_BONUS
-        reasons.append(f"matches your mood ({song.get('mood')})")
+                points = OTHER_WEIGHT * similarity / len(other_pairs)
+                reasons.append(f"{feature} match (+{points:.2f})")
 
     if not reasons:
         reasons.append("general similarity to your taste")
